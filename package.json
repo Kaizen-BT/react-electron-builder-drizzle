@@ -1,14 +1,20 @@
 {
-  "name": "root",
+  "name": "your-application",
   "description": "Secure boilerplate for Electron app based on Vite",
   "version": "3.1.0",
   "private": true,
   "type": "module",
   "author": {
-    "email": "kozackunisoft@gmail.com",
-    "name": "Alex Kozack",
-    "url": "https://kozack.me"
+    "email": "your-email@gmail.com",
+    "name": "your-name",
+    "url": "https://your-url.me"
   },
+  "contributors": [
+    {
+      "name": "Alex Kozack",
+      "url": "https://kozack.me/"
+    }
+  ],
   "main": "packages/entry-point.mjs",
   "workspaces": [
     "packages/*"
