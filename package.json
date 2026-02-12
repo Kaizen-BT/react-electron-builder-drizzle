@@ -43,6 +43,7 @@
     "playwright": "^1.58.1"
   },
   "dependencies": {
-    "@app/main": "*"
+    "@app/main": "*",
+    "react-router": "^7.13.0"
   }
 }
