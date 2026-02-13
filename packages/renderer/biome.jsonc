@@ -2,9 +2,7 @@
   "extends": "//",
   "linter": {
     "rules": {
-      "recommended": true,
       "correctness": {
-        "recommended": true,
         // Biome equivalent for eslint-plugin-react-hooks
         // See: https://biomejs.dev/linter/javascript/sources/#eslint-plugin-react-hooks
         "useExhaustiveDependencies": "error",
@@ -13,6 +11,7 @@
       },
       "style": {
         // Biome equivalent for eslint-plugin-react-refresh
+        // See: https://biomejs.dev/linter/javascript/sources/#eslint-plugin-react-refresh
         "useComponentExportOnlyModules": "warn"
       }
     }

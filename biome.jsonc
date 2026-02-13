@@ -17,7 +17,21 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true
+      "recommended": true,
+      "correctness": {
+        "recommended": true
+      },
+      "style": {
+        // Some equivalents for typescript-eslint
+        // See: https://biomejs.dev/linter/javascript/sources/#typescript-eslint
+        "useConsistentArrayType": {
+          "level": "info",
+          "options": {
+            "syntax": "shorthand"
+          }
+        },
+        "useDefaultParameterLast": "error"
+      }
     }
   },
   "javascript": {
