@@ -9,6 +9,7 @@ class ModuleRunner implements PromiseLike<unknown> {
     this.#promise = Promise.resolve();
   }
 
+  // biome-ignore lint/suspicious/noThenProperty: <The thenable behavior is intential as it allows for more simpler and easier ways of constructing AppModules>
   then<TResult1 = void, TResult2 = never>(
     onfulfilled?:
       | ((value: unknown) => TResult1 | PromiseLike<TResult1>)
