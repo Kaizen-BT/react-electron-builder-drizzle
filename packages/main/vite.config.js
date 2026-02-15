@@ -1,5 +1,5 @@
-import { getNodeMajorVersion } from "@app/electron-versions";
 import { spawn } from "node:child_process";
+import { getNodeMajorVersion } from "@app/electron-versions";
 import electronPath from "electron";
 
 export default /**

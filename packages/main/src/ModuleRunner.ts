@@ -2,7 +2,7 @@ import { app } from "electron";
 import type { AppModule } from "./AppModule.js";
 import type { ModuleContext } from "./ModuleContext.js";
 
-class ModuleRunner implements PromiseLike<void> {
+class ModuleRunner implements PromiseLike<unknown> {
   #promise: Promise<void>;
 
   constructor() {
@@ -11,10 +11,13 @@ class ModuleRunner implements PromiseLike<void> {
 
   then<TResult1 = void, TResult2 = never>(
     onfulfilled?:
-      | ((value: void) => TResult1 | PromiseLike<TResult1>)
+      | ((value: unknown) => TResult1 | PromiseLike<TResult1>)
       | null
       | undefined,
-    onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined,
+    onrejected?:
+      | ((reason: unknown) => TResult2 | PromiseLike<TResult2>)
+      | null
+      | undefined,
   ): PromiseLike<TResult1 | TResult2> {
     return this.#promise.then(onfulfilled, onrejected);
   }
