@@ -23,6 +23,7 @@
     "node": ">=23.0.0"
   },
   "scripts": {
+    "prepare": "git config blame.ignoreRevsFile .git-blame-ignore-revs || true",
     "build": "npm run build -ws --if-present",
     "compile": "npm run build && electron-builder build --config electron-builder.mjs",
     "test": "npx playwright test ./tests/e2e.spec.ts",
