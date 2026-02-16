@@ -46,6 +46,8 @@ export default /**
  * // _virtual_browser.mjs
  * export const someVar = globalThis[<hash>] // 'my-value'
  * ```
+ *
+ * @returns {import('vite').Plugin}
  */
 function mockExposed() {
   const virtualModuleId = "virtual:browser.js";

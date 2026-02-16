@@ -1,4 +1,4 @@
-import { execSync } from "child_process";
+import { execSync } from "node:child_process";
 import packageJson from "../../package.json" with { type: "json" };
 
 const viteVersion = packageJson.devDependencies["create-vite"] ?? "latest";
