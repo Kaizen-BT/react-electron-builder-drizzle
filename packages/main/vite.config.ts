@@ -1,7 +1,7 @@
-import { spawn } from "node:child_process";
+import { type ChildProcess, spawn } from "node:child_process";
 import { getNodeMajorVersion } from "@app/electron-versions";
 import electronPath from "electron";
-import { defineConfig, Plugin, PluginOption } from "vite";
+import { defineConfig, type Plugin, type PluginOption, type ViteDevServer } from "vite";
 
 export default defineConfig({
   build: {
@@ -22,7 +22,7 @@ export default defineConfig({
     emptyOutDir: true,
     reportCompressedSize: false,
   },
-  // TODO: Add plugins
+  plugins: [handleHotReload()],
 });
 
 /**
@@ -35,6 +35,9 @@ function isPlugin(plugin: PluginOption): plugin is Plugin {
 }
 
 function handleHotReload(): Plugin {
+  let electronApp: ChildProcess | null = null;
+  let rendererWatchServer: ViteDevServer | null = null;
+
   return {
     name: "@app/main-process-hot-reload",
 
@@ -50,6 +53,35 @@ function handleHotReload(): Plugin {
       if (!rendererWatchServerProvider) {
         throw new Error("Renderer watch server provider not found");
       }
+
+      rendererWatchServer =
+        rendererWatchServerProvider.api.provideRendererWatchServer();
+
+      process.env.VITE_DEV_SERVER_URL = rendererWatchServer?.resolvedUrls?.local[0];
+
+      return {
+        build: {
+          watch: {},
+        },
+      };
+    },
+
+    writeBundle() {
+      if (process.env.NODE_ENV !== "development") {
+        return;
+      }
+
+      if (electronApp !== null) {
+        electronApp.removeListener("exit", process.exit);
+        electronApp.kill("SIGINT");
+        electronApp = null;
+      }
+
+      electronApp = spawn(String(electronPath), ["--inspect", "."], {
+        stdio: "inherit",
+      });
+
+      electronApp.addListener("exit", process.exit);
     },
   };
 }
