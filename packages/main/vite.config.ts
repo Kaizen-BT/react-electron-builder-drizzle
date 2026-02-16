@@ -30,13 +30,13 @@ export default defineConfig({
  * NOTE: This is likely not robust enough but is sufficient
  * for the use case of this application
  */
-function isPlugin(plugin: PluginOption): plugin is Plugin {
-  return (plugin as Plugin).name !== undefined;
+function isViteDevServerPlugin(plugin: PluginOption): plugin is Plugin<ViteDevServer> {
+  return (plugin as Plugin<ViteDevServer>).api !== undefined;
 }
 
 function handleHotReload(): Plugin {
   let electronApp: ChildProcess | null = null;
-  let rendererWatchServer: ViteDevServer | null = null;
+  let rendererWatchServer: ViteDevServer | undefined;
 
   return {
     name: "@app/main-process-hot-reload",
@@ -47,15 +47,18 @@ function handleHotReload(): Plugin {
       }
 
       const rendererWatchServerProvider = config.plugins
-        ?.filter((p) => isPlugin(p))
-        .find((plugin) => plugin.name === "@app/renderer-watch-server-provider");
+        ?.filter((p) => isViteDevServerPlugin(p))
+        .find(
+          (plugin) =>
+            plugin.name === "@app/renderer-watch-server-provider" &&
+            plugin.api !== undefined,
+        );
 
-      if (!rendererWatchServerProvider) {
-        throw new Error("Renderer watch server provider not found");
+      if (!rendererWatchServerProvider?.api) {
+        throw new Error("Vite-Dev-Server-Error: Renderer not found");
       }
 
-      rendererWatchServer =
-        rendererWatchServerProvider.api.provideRendererWatchServer();
+      rendererWatchServer = rendererWatchServerProvider.api;
 
       process.env.VITE_DEV_SERVER_URL = rendererWatchServer?.resolvedUrls?.local[0];
 

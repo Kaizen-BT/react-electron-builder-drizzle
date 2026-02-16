@@ -5,30 +5,30 @@ export default /**
  * @type {import('vite').UserConfig}
  * @see https://vitejs.dev/config/
  */
-({
-  build: {
-    ssr: true,
-    sourcemap: "inline",
-    outDir: "dist",
-    target: `chrome${getChromeMajorVersion()}`,
-    assetsDir: ".",
-    lib: {
-      entry: ["src/exposed.ts", "virtual:browser.js"],
+  ({
+    build: {
+      ssr: true,
+      sourcemap: "inline",
+      outDir: "dist",
+      target: `chrome${getChromeMajorVersion()}`,
+      assetsDir: ".",
+      lib: {
+        entry: ["src/exposed.ts", "virtual:browser.js"],
+      },
+      rollupOptions: {
+        output: [
+          {
+            // ESM preload scripts must have the .mjs extension
+            // https://www.electronjs.org/docs/latest/tutorial/esm#esm-preload-scripts-must-have-the-mjs-extension
+            entryFileNames: "[name].mjs",
+          },
+        ],
+      },
+      emptyOutDir: true,
+      reportCompressedSize: false,
     },
-    rollupOptions: {
-      output: [
-        {
-          // ESM preload scripts must have the .mjs extension
-          // https://www.electronjs.org/docs/latest/tutorial/esm#esm-preload-scripts-must-have-the-mjs-extension
-          entryFileNames: "[name].mjs",
-        },
-      ],
-    },
-    emptyOutDir: true,
-    reportCompressedSize: false,
-  },
-  plugins: [mockExposed(), handleHotReload()],
-});
+    plugins: [mockExposed(), handleHotReload()],
+  });
 
 /**
  * This plugin creates a browser (renderer) version of `preload` package.
@@ -101,8 +101,7 @@ function handleHotReload() {
         throw new Error("Renderer watch server provider not found");
       }
 
-      rendererWatchServer =
-        rendererWatchServerProvider.api.provideRendererWatchServer();
+      rendererWatchServer = rendererWatchServerProvider.api;
 
       return {
         build: {

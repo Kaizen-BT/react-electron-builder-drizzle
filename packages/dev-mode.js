@@ -31,14 +31,10 @@ await rendererWatchServer.listen();
  * 3. We are creating a simple provider plugin.
  * Its only purpose is to provide access to the renderer dev-server to all other build processes.
  */
-/** @type {import('vite').Plugin} */
+/** @type {import('vite').Plugin<import('vite').ViteDevServer>} */
 const rendererWatchServerProvider = {
   name: "@app/renderer-watch-server-provider",
-  api: {
-    provideRendererWatchServer() {
-      return rendererWatchServer;
-    },
-  },
+  api: rendererWatchServer,
 };
 
 /**
