@@ -25,13 +25,24 @@ export default defineConfig({
   plugins: [handleHotReload()],
 });
 
+type RendererDevServerPlugin = Plugin<ViteDevServer>;
+
 /**
- * Type Predicate to help narrow down types of PluginOptions
- * NOTE: This is likely not robust enough but is sufficient
- * for the use case of this application
+ * Type predicate to determine if the PluginOption is
+ * the plugin containing information on the vite-dev-server
+ * used by the renderer
  */
-function isViteDevServerPlugin(plugin: PluginOption): plugin is Plugin<ViteDevServer> {
-  return (plugin as Plugin<ViteDevServer>).api !== undefined;
+function isViteDevServerPlugin(
+  plugin: PluginOption,
+): plugin is RendererDevServerPlugin {
+  if (!plugin || Array.isArray(plugin) || "then" in plugin) {
+    return false;
+  }
+
+  return (
+    plugin.name === "@app/renderer-watch-server-provider" &&
+    (plugin as RendererDevServerPlugin).api !== undefined
+  );
 }
 
 function handleHotReload(): Plugin {
@@ -46,13 +57,7 @@ function handleHotReload(): Plugin {
         return;
       }
 
-      const rendererWatchServerProvider = config.plugins
-        ?.filter((p) => isViteDevServerPlugin(p))
-        .find(
-          (plugin) =>
-            plugin.name === "@app/renderer-watch-server-provider" &&
-            plugin.api !== undefined,
-        );
+      const rendererWatchServerProvider = config.plugins?.find(isViteDevServerPlugin);
 
       if (!rendererWatchServerProvider?.api) {
         throw new Error("Vite-Dev-Server-Error: Renderer not found");
