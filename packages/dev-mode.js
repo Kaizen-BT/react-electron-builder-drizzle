@@ -8,6 +8,8 @@ import { build, createServer } from "vite";
 
 /**
  * 1. We create a few flags to let everyone know that we are in development mode.
+ * NOTE: Using build and createServer in the same process require the following env flags
+ * See: https://vite.dev/guide/api-javascript#createserver
  */
 const mode = "development";
 process.env.NODE_ENV = mode;
@@ -34,7 +36,7 @@ await rendererWatchServer.listen();
 /** @type {import('vite').Plugin<import('vite').ViteDevServer>} */
 const rendererWatchServerProvider = {
   name: "@app/renderer-watch-server-provider",
-  api: rendererWatchServer,
+  api: rendererWatchServer.api,
 };
 
 /**
