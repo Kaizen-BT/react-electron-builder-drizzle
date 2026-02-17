@@ -17,7 +17,7 @@ export async function initApp(initConfig: AppInitConfig) {
     .init(autoUpdater())
 
     // Install DevTools extension if needed
-    // .init(chromeDevToolsExtension({extension: 'VUEJS3_DEVTOOLS'}))
+    //.init(chromeDevToolsExtension({ extension: "REACT_DEVELOPER_TOOLS" }))
 
     // Security
     .init(
@@ -30,7 +30,7 @@ export async function initApp(initConfig: AppInitConfig) {
         new Set(
           initConfig.renderer instanceof URL
             ? [
-                "https://vite.dev",
+                "",
                 "https://developer.mozilla.org",
                 "https://solidjs.com",
                 "https://qwik.dev",

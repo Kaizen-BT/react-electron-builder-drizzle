@@ -27,7 +27,7 @@
     "build": "npm run build -ws --if-present",
     "compile": "npm run build && electron-builder build --config electron-builder.mjs",
     "test": "npx playwright test ./tests/e2e.spec.ts",
-    "start": "node packages/dev-mode.js",
+    "start": "npx tsx packages/dev-mode.ts",
     "typecheck": "npm run typecheck -ws --if-present",
     "create-renderer": "cd packages && node ./integrate-renderer/create-renderer.js",
     "integrate-renderer": "npm start --workspace @app/integrate-renderer",
@@ -47,6 +47,7 @@
     "electron-builder": "26.7.0",
     "glob": "13.0.1",
     "playwright": "^1.58.1",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3",
     "vite": "7.3.1"
   },
