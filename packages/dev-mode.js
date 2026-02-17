@@ -36,7 +36,7 @@ await rendererWatchServer.listen();
 /** @type {import('vite').Plugin<import('vite').ViteDevServer>} */
 const rendererWatchServerProvider = {
   name: "@app/renderer-watch-server-provider",
-  api: rendererWatchServer.api,
+  api: rendererWatchServer,
 };
 
 /**
