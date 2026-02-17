@@ -1,0 +1,6 @@
+{
+  "name": "@app/tools",
+  "version": "1.0.0",
+  "description": "Helper package containing tools to be consumed during build time and development only ",
+  "type": "module"
+}
