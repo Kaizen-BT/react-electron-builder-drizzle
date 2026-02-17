@@ -25,7 +25,9 @@ export default defineConfig({
   plugins: [handleHotReload()],
 });
 
-type RendererDevServerPlugin = Plugin<ViteDevServer>;
+interface RendererDevServerPlugin extends Plugin {
+  api: ViteDevServer;
+}
 
 /**
  * Type predicate to determine if the PluginOption is
@@ -41,7 +43,7 @@ function isViteDevServerPlugin(
 
   return (
     plugin.name === "@app/renderer-watch-server-provider" &&
-    (plugin as RendererDevServerPlugin).api !== undefined
+    typeof (plugin as RendererDevServerPlugin).api.resolvedUrls === "object"
   );
 }
 
@@ -66,13 +68,13 @@ function handleHotReload(): Plugin {
       // See: https://rollupjs.org/plugin-development/#direct-plugin-communication
       const rendererWatchServerProvider = config.plugins?.find(isViteDevServerPlugin);
 
-      if (!rendererWatchServerProvider?.api) {
+      if (!rendererWatchServerProvider) {
         throw new Error("Vite-Dev-Server-Error: Renderer not found");
       }
 
       rendererWatchServer = rendererWatchServerProvider.api;
 
-      process.env.VITE_DEV_SERVER_URL = rendererWatchServer?.resolvedUrls?.local[0];
+      process.env.VITE_DEV_SERVER_URL = rendererWatchServer.resolvedUrls?.local[0];
 
       return {
         build: {

@@ -75,7 +75,9 @@ function mockExposed(): Plugin {
   };
 }
 
-type RendererDevServerPlugin = Plugin<ViteDevServer>;
+interface RendererDevServerPlugin extends Plugin {
+  api: ViteDevServer;
+}
 
 /**
  * Type predicate to determine if the PluginOption is
@@ -91,7 +93,7 @@ function isViteDevServerPlugin(
 
   return (
     plugin.name === "@app/renderer-watch-server-provider" &&
-    (plugin as RendererDevServerPlugin).api !== undefined
+    typeof (plugin as RendererDevServerPlugin).api.resolvedUrls === "object"
   );
 }
 
@@ -111,7 +113,7 @@ function handleHotReload(): Plugin {
 
       const rendererWatchServerProvider = config.plugins?.find(isViteDevServerPlugin);
 
-      if (!rendererWatchServerProvider?.api) {
+      if (!rendererWatchServerProvider) {
         throw new Error("Vite-Dev-Server-Error: Renderer not found");
       }
 
