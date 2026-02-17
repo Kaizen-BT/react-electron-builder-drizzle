@@ -1,6 +1,7 @@
 import { getChromeMajorVersion } from "@app/electron-versions";
+import { isRendererDevServerPlugin } from "@app/tools";
 import { resolveModuleExportNames } from "mlly";
-import { defineConfig, type Plugin, type PluginOption, type ViteDevServer } from "vite";
+import { defineConfig, type Plugin, type ViteDevServer } from "vite";
 
 export default defineConfig({
   build: {
@@ -75,28 +76,6 @@ function mockExposed(): Plugin {
   };
 }
 
-interface RendererDevServerPlugin extends Plugin {
-  api: ViteDevServer;
-}
-
-/**
- * Type predicate to determine if the PluginOption is
- * the plugin containing information on the vite-dev-server
- * used by the renderer
- */
-function isViteDevServerPlugin(
-  plugin: PluginOption,
-): plugin is RendererDevServerPlugin {
-  if (!plugin || Array.isArray(plugin) || "then" in plugin) {
-    return false;
-  }
-
-  return (
-    plugin.name === "@app/renderer-watch-server-provider" &&
-    typeof (plugin as RendererDevServerPlugin).api.resolvedUrls === "object"
-  );
-}
-
 /**
  * Implement Electron webview reload when some file was changed
  * @return {Plugin}
@@ -111,7 +90,9 @@ function handleHotReload(): Plugin {
         return;
       }
 
-      const rendererWatchServerProvider = config.plugins?.find(isViteDevServerPlugin);
+      const rendererWatchServerProvider = config.plugins?.find(
+        isRendererDevServerPlugin,
+      );
 
       if (!rendererWatchServerProvider) {
         throw new Error("Vite-Dev-Server-Error: Renderer not found");
