@@ -45,6 +45,11 @@ function isViteDevServerPlugin(
   );
 }
 
+/**
+ * HotReload plugin for main package
+ * @see {@link https://rollupjs.org/plugin-development/#direct-plugin-communication | Rollup}
+ * @returns {Plugin}
+ */
 function handleHotReload(): Plugin {
   let electronApp: ChildProcess | null = null;
   let rendererWatchServer: ViteDevServer | undefined;
@@ -57,6 +62,8 @@ function handleHotReload(): Plugin {
         return;
       }
 
+      // This is the recommended way for inter-plugin communication
+      // See: https://rollupjs.org/plugin-development/#direct-plugin-communication
       const rendererWatchServerProvider = config.plugins?.find(isViteDevServerPlugin);
 
       if (!rendererWatchServerProvider?.api) {
@@ -79,16 +86,21 @@ function handleHotReload(): Plugin {
         return;
       }
 
+      // Kill active Electron instance and restart to ensure changes
+      // are reflected
       if (electronApp !== null) {
         electronApp.removeListener("exit", process.exit);
         electronApp.kill("SIGINT");
         electronApp = null;
       }
 
+      // Launch electron
+      // Equivalent to: npx electron . (resolves the root package.json's "main" field)
       electronApp = spawn(String(electronPath), ["--inspect", "."], {
         stdio: "inherit",
       });
 
+      // Close electron when Node.js process is exited
       electronApp.addListener("exit", process.exit);
     },
   };
