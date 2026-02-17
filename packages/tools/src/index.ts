@@ -2,7 +2,7 @@ import type { Plugin, PluginOption, ViteDevServer } from "vite";
 
 export const RENDERER_DEV_SERVER_PLUGIN_NAME = "@app/renderer-watch-server-provider";
 
-interface RendererDevServerPlugin extends Plugin {
+export interface RendererDevServerPlugin extends Plugin {
   api: ViteDevServer;
 }
 
