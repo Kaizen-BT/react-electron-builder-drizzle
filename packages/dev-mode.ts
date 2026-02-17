@@ -25,20 +25,20 @@ process.env.MODE = mode;
  * This server should be started first because other packages depend on its settings.
  */
 
-const rendererWatchServer = await createServer({
+const rendererDevServer = await createServer({
   mode,
   root: path.resolve("packages/renderer"),
 });
 
-await rendererWatchServer.listen();
+await rendererDevServer.listen();
 
 /**
  * 3. We are creating a simple provider plugin.
  * Its only purpose is to provide access to the renderer dev-server to all other build processes.
  */
-const rendererDevServer: RendererDevServerPlugin = {
+const rendererDevServerPlugin: RendererDevServerPlugin = {
   name: RENDERER_DEV_SERVER_PLUGIN_NAME,
-  api: rendererWatchServer,
+  api: rendererDevServer,
 };
 
 /**
@@ -52,6 +52,6 @@ for (const pkg of packagesToStart) {
   await build({
     mode,
     root: path.resolve(pkg),
-    plugins: [rendererDevServer],
+    plugins: [rendererDevServerPlugin],
   });
 }
