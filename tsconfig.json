@@ -1,0 +1,11 @@
+// This is for usage in the orchestrator scripts only
+{
+  "compilerOptions": {
+    "module": "ESNext",
+    "target": "esnext",
+    "moduleResolution": "Bundler",
+    "paths": {
+      "@app/tooling": ["./packages/tooling/src/index.ts"]
+    }
+  }
+}
