@@ -13,7 +13,7 @@ export async function initApp(initConfig: AppInitConfig) {
     .init(createWindowManagerModule({ initConfig, openDevTools: import.meta.env.DEV }))
     .init(disallowMultipleAppInstance())
     .init(terminateAppOnLastWindowClose())
-    .init(hardwareAccelerationMode({ enable: false }))
+    .init(hardwareAccelerationMode({ enable: true }))
     .init(autoUpdater())
 
     // Install DevTools extension if needed
@@ -30,16 +30,16 @@ export async function initApp(initConfig: AppInitConfig) {
         new Set(
           initConfig.renderer instanceof URL
             ? [
-                "",
-                "https://developer.mozilla.org",
-                "https://solidjs.com",
-                "https://qwik.dev",
-                "https://lit.dev",
-                "https://react.dev",
-                "https://preactjs.com",
-                "https://www.typescriptlang.org",
-                "https://vuejs.org",
-              ]
+              "",
+              "https://developer.mozilla.org",
+              "https://solidjs.com",
+              "https://qwik.dev",
+              "https://lit.dev",
+              "https://react.dev",
+              "https://preactjs.com",
+              "https://www.typescriptlang.org",
+              "https://vuejs.org",
+            ]
             : [],
         ),
       ),
